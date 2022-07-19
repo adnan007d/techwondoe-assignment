@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { deleteShow } from "../../../api-logic/controllers/shows/deleteShow";
-import { IShow } from "../../../api-logic/models/Shows";
+import { IShow } from "../../../api-logic/models/ShowModal";
 import withAuth from "../../../middleware/withAuth";
 
 type Data = {

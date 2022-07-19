@@ -1,5 +1,5 @@
 import joi from "joi";
-import { IShow } from "../../models/Shows";
+import { IShow } from "../../models/ShowModal";
 
 const validateShow = joi.object({
   title: joi.string().required(),

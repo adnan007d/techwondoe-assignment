@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { createShow } from "../../../api-logic/controllers/shows/createShow";
 import { validateShow } from "../../../api-logic/controllers/shows/showUtil";
 import { updateShow } from "../../../api-logic/controllers/shows/updateShow";
-import { IShow } from "../../../api-logic/models/Shows";
+import { IShow } from "../../../api-logic/models/ShowModal";
 import withAuth from "../../../middleware/withAuth";
 
 type Data = {

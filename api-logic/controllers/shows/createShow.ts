@@ -1,4 +1,4 @@
-import showSchema, { IShow } from "../../models/Shows";
+import showSchema, { IShow } from "../../models/ShowModal";
 import { generateUserResult } from "./showUtil";
 
 const createShowImpl = async (show: IShow) => {

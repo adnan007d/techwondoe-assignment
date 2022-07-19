@@ -1,4 +1,4 @@
-import showSchema from "../../models/Shows";
+import showSchema from "../../models/ShowModal";
 import { generateUserResult } from "./showUtil";
 
 const deleteShowImpl = async (userId: string, showId: string) => {
