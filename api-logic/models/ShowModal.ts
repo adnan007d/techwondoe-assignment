@@ -7,7 +7,7 @@ export interface IShow {
   title: string;
   streamingApp: string;
   imageURL?: string;
-  rating?: [
+  ratings?: [
     {
       userId: IUser;
       stars: number;
@@ -40,7 +40,7 @@ const showSchema = new Schema({
     default:
       "https://dominionmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
   },
-  rating: [
+  ratings: [
     {
       type: Schema.Types.ObjectId,
       ref: "ratings",
