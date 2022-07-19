@@ -9,4 +9,13 @@ const getShowById = async (id: string) => {
   }
 };
 
-export { getShowById };
+const getShows = async () => {
+  try {
+    return await showSchema.find().populate("ratings");
+  } catch (err) {
+    console.error(err);
+    return null;
+  }
+};
+
+export { getShowById, getShows };
