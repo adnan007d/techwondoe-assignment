@@ -5,6 +5,7 @@ export interface IShow {
   userId: string;
   title: string;
   streamingApp: string;
+  imageURL?: string;
   rating?: [
     {
       userId: IUser;
@@ -32,6 +33,11 @@ const showSchema = new Schema({
   streamingApp: {
     type: String,
     required: true,
+  },
+  imageURL: {
+    type: String,
+    default:
+      "https://dominionmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
   },
   rating: {
     type: [
@@ -69,4 +75,4 @@ const showSchema = new Schema({
   },
 });
 
-export default models.shows || model("shows", showSchema);
+export default models.shows || model<IShow>("shows", showSchema);
