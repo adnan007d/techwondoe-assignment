@@ -21,7 +21,7 @@ const updateShowImpl = async (userId: string, show: IShow) => {
 
 const updateShow = async (userId: string, show: IShow) => {
   try {
-    return updateShowImpl(userId, show);
+    return await updateShowImpl(userId, show);
   } catch (err) {
     console.error(err);
     return generateShowResult(true, "Something went wrong");

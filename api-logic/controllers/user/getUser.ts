@@ -19,7 +19,7 @@ const getUserImpl = async (user: IUser) => {
 
 const getUser = async (user: IUser) => {
   try {
-    return getUserImpl(user);
+    return await getUserImpl(user);
   } catch (err) {
     console.error(err);
 

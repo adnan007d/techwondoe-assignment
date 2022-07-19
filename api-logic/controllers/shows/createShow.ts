@@ -11,7 +11,7 @@ const createShowImpl = async (show: IShow) => {
 
 const createShow = async (show: IShow) => {
   try {
-    return createShowImpl(show);
+    return await createShowImpl(show);
   } catch (err) {
     console.error(err);
     return generateShowResult(true, "Something went wrong");

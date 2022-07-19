@@ -18,7 +18,7 @@ const createUserImpl = async (user: IUser) => {
 
 const createUser = async (user: IUser) => {
   try {
-    return createUserImpl(user);
+    return await createUserImpl(user);
   } catch (err) {
     console.error(err);
     return generateUserResult(true, "Something went wrong");

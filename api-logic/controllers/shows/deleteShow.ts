@@ -16,7 +16,7 @@ const deleteShowImpl = async (userId: string, showId: string) => {
 
 const deleteShow = async (userId: string, showId: string) => {
   try {
-    return deleteShowImpl(userId, showId);
+    return await deleteShowImpl(userId, showId);
   } catch (err) {
     console.error(err);
     return generateShowResult(true, "Something went wrong");
