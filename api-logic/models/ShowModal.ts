@@ -1,5 +1,6 @@
 import { Schema, models, model } from "mongoose";
-import { IUser } from "./UserModal";
+import userSchema, { IUser } from "./UserModal";
+import ratingSchema from "./RatingModal";
 
 export interface IShow {
   _id?: string;
@@ -24,7 +25,7 @@ export interface IShow {
 const showSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
-    ref: "users",
+    ref: userSchema.modelName,
     required: true,
   },
   title: {
@@ -43,7 +44,7 @@ const showSchema = new Schema({
   ratings: [
     {
       type: Schema.Types.ObjectId,
-      ref: "ratings",
+      ref: ratingSchema.modelName,
     },
   ],
   reviews: [
