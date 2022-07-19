@@ -1,5 +1,5 @@
 import showSchema, { IShow } from "../../models/ShowModal";
-import { generateUserResult } from "./showUtil";
+import { generateShowResult } from "./showUtil";
 
 const updateShowImpl = async (userId: string, show: IShow) => {
   const showDoc = await showSchema.findOneAndUpdate(
@@ -13,9 +13,9 @@ const updateShowImpl = async (userId: string, show: IShow) => {
   );
 
   if (showDoc) {
-    return generateUserResult(false, "Show Updated Successfully", showDoc);
+    return generateShowResult(false, "Show Updated Successfully", showDoc);
   } else {
-    return generateUserResult(true, "Invalid Show Id");
+    return generateShowResult(true, "Invalid Show Id");
   }
 };
 
@@ -24,7 +24,7 @@ const updateShow = async (userId: string, show: IShow) => {
     return updateShowImpl(userId, show);
   } catch (err) {
     console.error(err);
-    return generateUserResult(true, "Something went wrong");
+    return generateShowResult(true, "Something went wrong");
   }
 };
 

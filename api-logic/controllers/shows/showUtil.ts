@@ -7,22 +7,9 @@ const validateShow = joi.object({
   imageURL: joi.string(),
   user: joi.any(),
   _id: joi.optional(),
-  // userId: joi.string().required(),
-  // rating: joi.array().items(
-  //   joi.object({
-  //     userId: joi.string().required(),
-  //     stars: joi.number().max(5).min(1).required(),
-  //   })
-  // ),
-  // reviews: joi.array().items(
-  //   joi.object({
-  //     userId: joi.string().required(),
-  //     reviewText: joi.string().min(1).max(255).required(),
-  //   })
-  // ),
 });
 
-interface IUserResult {
+interface IShowResult {
   error: boolean;
   response: {
     data: null | IShow;
@@ -30,11 +17,11 @@ interface IUserResult {
   };
 }
 
-interface IGenerateUserResult {
-  (error: boolean, message: string, data?: null | IShow): IUserResult;
+interface IGenerateShowResult {
+  (error: boolean, message: string, data?: null | IShow): IShowResult;
 }
 
-const generateUserResult: IGenerateUserResult = (
+const generateShowResult: IGenerateShowResult = (
   error,
   message,
   data = null
@@ -48,4 +35,4 @@ const generateUserResult: IGenerateUserResult = (
   };
 };
 
-export { validateShow, generateUserResult };
+export { validateShow, generateShowResult };

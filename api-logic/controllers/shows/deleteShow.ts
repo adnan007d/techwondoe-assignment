@@ -1,5 +1,5 @@
 import showSchema from "../../models/ShowModal";
-import { generateUserResult } from "./showUtil";
+import { generateShowResult } from "./showUtil";
 
 const deleteShowImpl = async (userId: string, showId: string) => {
   const showDoc = await showSchema.findOneAndDelete({
@@ -8,9 +8,9 @@ const deleteShowImpl = async (userId: string, showId: string) => {
   });
 
   if (showDoc) {
-    return generateUserResult(false, "Show Deleted Successfully");
+    return generateShowResult(false, "Show Deleted Successfully");
   } else {
-    return generateUserResult(true, "Invalid Show Id");
+    return generateShowResult(true, "Invalid Show Id");
   }
 };
 
@@ -19,7 +19,7 @@ const deleteShow = async (userId: string, showId: string) => {
     return deleteShowImpl(userId, showId);
   } catch (err) {
     console.error(err);
-    return generateUserResult(true, "Something went wrong");
+    return generateShowResult(true, "Something went wrong");
   }
 };
 

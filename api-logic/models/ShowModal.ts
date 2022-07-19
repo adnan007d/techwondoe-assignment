@@ -40,40 +40,18 @@ const showSchema = new Schema({
     default:
       "https://dominionmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
   },
-  rating: {
-    type: [
-      {
-        userId: {
-          type: Schema.Types.ObjectId,
-          ref: "users",
-          required: true,
-        },
-        stars: {
-          type: Number,
-          required: true,
-          max: 5,
-          min: 1,
-        },
-      },
-    ],
-  },
-  reviews: {
-    type: [
-      {
-        userId: {
-          type: Schema.Types.ObjectId,
-          ref: "users",
-          required: true,
-        },
-        reviewText: {
-          type: String,
-          required: true,
-          maxlength: 255,
-          minlength: 1,
-        },
-      },
-    ],
-  },
+  rating: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "ratings",
+    },
+  ],
+  reviews: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "reviews",
+    },
+  ],
 });
 
 export default models.shows || model<IShow>("shows", showSchema);
