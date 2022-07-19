@@ -14,7 +14,7 @@ const getShows = async () => {
     return await showSchema.find().populate("ratings");
   } catch (err) {
     console.error(err);
-    return null;
+    return [];
   }
 };
 
