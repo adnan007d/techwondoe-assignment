@@ -2,7 +2,7 @@ import dbConnect from "../../db-config/mongoConfig";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { IUser } from "../../api-logic/models/UserModal";
 import { createUser } from "../../api-logic/controllers/user/createUser";
-import { validateUser } from "../../api-logic/controllers/user/userValidater";
+import { validateUser } from "../../api-logic/controllers/user/userUtil";
 
 type Data = {
   message: string;

@@ -3,11 +3,13 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { IUser } from "../../api-logic/models/UserModal";
 import { getUser } from "../../api-logic/controllers/user/getUser";
 import jwt from "jsonwebtoken";
-import { validateUser } from "../../api-logic/controllers/user/userValidater";
+import { validateUser } from "../../api-logic/controllers/user/userUtil";
 
 type Data = {
   message: string;
-  token?: string;
+  data?: {
+    token: string;
+  };
 };
 
 const jwtSecret = process.env.SECRET;
@@ -36,20 +38,22 @@ export default async function handler(
 
   if (error) {
     return res.status(400).json({
-      ...response,
+      message: response.message,
     });
   }
 
   const token = jwt.sign(
     {
-      user: response.data.username,
+      user: response.data?.username,
     },
     jwtSecret!,
     { expiresIn: "8h" }
   );
 
   res.status(200).json({
-    token: token,
+    data: {
+      token: token,
+    },
     message: "Login Successful",
   });
 }
