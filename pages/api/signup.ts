@@ -13,6 +13,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
+  if (req.method !== "POST")
+    return res.status(405).json({ message: "Method Not Allowed" });
   await dbConnect();
 
   const body: IUser = req.body;
