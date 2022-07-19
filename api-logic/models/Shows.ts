@@ -2,6 +2,7 @@ import { Schema, models, model } from "mongoose";
 import { IUser } from "./UserModal";
 
 export interface IShow {
+  _id?: string;
   userId: string;
   title: string;
   streamingApp: string;

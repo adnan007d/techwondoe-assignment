@@ -6,6 +6,7 @@ const validateShow = joi.object({
   streamingApp: joi.string().required(),
   imageURL: joi.string(),
   user: joi.any(),
+  _id: joi.optional(),
   // userId: joi.string().required(),
   // rating: joi.array().items(
   //   joi.object({
