@@ -1,7 +1,7 @@
 import { Schema, models, model } from "mongoose";
 import userSchema, { IUser } from "./UserModal";
 import ratingSchema from "./RatingModal";
-
+import reviewSchema from "./ReviewModal";
 export interface IShow {
   _id?: string;
   userId: string;
@@ -50,7 +50,7 @@ const showSchema = new Schema({
   reviews: [
     {
       type: Schema.Types.ObjectId,
-      ref: "reviews",
+      ref: reviewSchema.modelName,
     },
   ],
 });
