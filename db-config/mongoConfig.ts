@@ -29,9 +29,11 @@ async function dbConnect() {
     const opts = {
       bufferCommands: false,
     };
-    cached.promise = connect(MONGODB_URI!, opts).then((mongoose) => {
-      return mongoose;
-    });
+    cached.promise = connect(MONGODB_URI!, opts)
+      .then((mongoose) => {
+        return mongoose;
+      })
+      .catch((err) => console.error(err));
   }
   cached.conn = await cached.promise;
   return cached.conn;
