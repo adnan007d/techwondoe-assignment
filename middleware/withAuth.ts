@@ -20,9 +20,14 @@ const withAuth = (handler: NextApiHandler) => {
       const decoded = jwt.verify(token!, jwtSecret!);
 
       if (typeof decoded !== "string") {
-        req.body.user = await userSchema.findOne({
+        const user = await userSchema.findOne({
           username: decoded.user,
         });
+        if (typeof req.body === "string")
+          req.body = {
+            user,
+          };
+        else req.body.user = user;
       }
 
       return handler(req, res);
