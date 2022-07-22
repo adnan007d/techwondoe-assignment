@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import { getShows } from "../util/db/getShows";
-import Counter from "../components/Counter";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { clearToken, setToken } from "../util/util";
+import { checkIfUnauthorized } from "../util/util";
+import ResponsiveDrawer from "../components/ResponsiveDrawer";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -11,11 +11,7 @@ const Home: NextPage = () => {
     getShows()
       .then((data) => console.log(data))
       .catch((err) => {
-        if (
-          err.response.status === 401 &&
-          err.response.data.message.toLowerCase() === "unauthorized"
-        ) {
-          clearToken();
+        if (checkIfUnauthorized(err)) {
           router.push("/login");
         }
       });
@@ -23,7 +19,9 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <Counter />
+      <ResponsiveDrawer>
+        <div>Hello World</div>
+      </ResponsiveDrawer>
     </div>
   );
 };

@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { getToken, setToken } from "../util/util";
 import joi from "joi";
 import { useSnackbar } from "notistack";
+import Link from "next/link";
 
 const defaultFormData = {
   username: "",
@@ -103,6 +104,11 @@ const SignUp: NextPage = () => {
             label="Password"
             value={formData.password}
           />
+          <div className="flex justify-end px-2">
+            <Link href={"/login"}>
+              <span className="link">already have an account ?</span>
+            </Link>
+          </div>
           <Button
             variant="contained"
             className="bg-blue-700"
