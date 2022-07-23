@@ -1,11 +1,29 @@
-import { AxiosError } from "axios";
-import { NextRouter } from "next/router";
+import { store } from "../app/store";
+import { clearUser, setUser } from "../features/user/userSlice";
+import jwt from "jsonwebtoken";
 
 const getToken = () => localStorage.getItem("token");
 
-const setToken = (token: string) => localStorage.setItem("token", token);
+const getUserNameFromToken = () => {
+  const decodedToken = jwt.decode(getToken()!);
+  if (typeof decodedToken !== "string") {
+    return {
+      username: decodedToken?.user,
+      id: decodedToken?.id,
+    };
+  }
+  return null;
+};
 
-const clearToken = () => localStorage.removeItem("token");
+const setToken = (token: string) => {
+  localStorage.setItem("token", token);
+  store.dispatch(setUser(getUserNameFromToken()));
+};
+
+const clearToken = () => {
+  store.dispatch(clearUser());
+  localStorage.removeItem("token");
+};
 
 const checkIfUnauthorized = (err: any) => {
   if (
@@ -18,4 +36,10 @@ const checkIfUnauthorized = (err: any) => {
   return false;
 };
 
-export { getToken, setToken, clearToken, checkIfUnauthorized };
+export {
+  getToken,
+  setToken,
+  clearToken,
+  checkIfUnauthorized,
+  getUserNameFromToken,
+};

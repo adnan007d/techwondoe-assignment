@@ -4,23 +4,29 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { checkIfUnauthorized } from "../util/util";
 import ResponsiveDrawer from "../components/ResponsiveDrawer";
+import Shows from "../components/Shows";
+import { useDispatch } from "react-redux";
+import { setShows } from "../features/shows/showsSlice";
 
 const Home: NextPage = () => {
   const router = useRouter();
+
+  const dispatch = useDispatch();
+
   useEffect(() => {
     getShows()
-      .then((data) => console.log(data))
+      .then((data) => dispatch(setShows(data)))
       .catch((err) => {
         if (checkIfUnauthorized(err)) {
           router.push("/login");
         }
       });
-  }, [router]);
+  }, [router, dispatch]);
 
   return (
     <div>
       <ResponsiveDrawer>
-        <div>Hello World</div>
+        <Shows />
       </ResponsiveDrawer>
     </div>
   );

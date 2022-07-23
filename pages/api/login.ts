@@ -48,6 +48,7 @@ export default async function handler(
   const token = jwt.sign(
     {
       user: response.data?.username,
+      id: response.data?._id,
     },
     jwtSecret!,
     { expiresIn: "8h" }

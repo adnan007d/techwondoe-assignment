@@ -1,3 +1,4 @@
+import type { IShowPopulated } from "../../api-logic/models/ShowModal";
 import authAxios from "../authAxios";
 
 export interface IUser {
@@ -5,27 +6,7 @@ export interface IUser {
   username: string;
 }
 
-export interface IShow {
-  _id?: string;
-  userId: string;
-  title: string;
-  streamingApp: string;
-  imageURL?: string;
-  ratings?: [
-    {
-      userId: IUser;
-      stars: number;
-    }
-  ];
-  reviews?: [
-    {
-      userId: IUser;
-      reviewText: string;
-    }
-  ];
-}
-
-const getShows = async (): Promise<IShow[]> => {
+const getShows = async (): Promise<IShowPopulated[]> => {
   try {
     return await (
       await authAxios.get("/api/shows")

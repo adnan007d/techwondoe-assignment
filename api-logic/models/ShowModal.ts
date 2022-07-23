@@ -1,25 +1,22 @@
 import { Schema, models, model } from "mongoose";
 import userSchema, { IUser } from "./UserModal";
-import ratingSchema from "./RatingModal";
-import reviewSchema from "./ReviewModal";
+import ratingSchema, { IRating } from "./RatingModal";
+import reviewSchema, { IReview } from "./ReviewModal";
 export interface IShow {
   _id?: string;
   userId: string;
   title: string;
   streamingApp: string;
   imageURL?: string;
-  ratings?: [
-    {
-      userId: IUser;
-      stars: number;
-    }
-  ];
-  reviews?: [
-    {
-      userId: IUser;
-      reviewText: string;
-    }
-  ];
+  ratings?: string[];
+  reviews?: string[];
+}
+
+export interface IShowPopulated
+  extends Omit<IShow, "userId" | "ratings" | "reviews"> {
+  userId: IUser;
+  ratings: IRating[];
+  reviews: IReview[];
 }
 
 const showSchema = new Schema({

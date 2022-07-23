@@ -11,7 +11,11 @@ const getShowById = async (id: string) => {
 
 const getShows = async () => {
   try {
-    return await showSchema.find().populate("ratings").populate("reviews");
+    return await showSchema
+      .find()
+      .populate("ratings")
+      .populate("reviews")
+      .populate("userId", "username _id");
   } catch (err) {
     console.error(err);
     return [];
