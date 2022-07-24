@@ -2,17 +2,15 @@ import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import LoadingComponent from "../../../components/Loading";
 import ResponsiveDrawer from "../../../components/ResponsiveDrawer";
-import ShowForm from "../../../components/ShowForm";
-import CircularProgress from "@mui/material/CircularProgress";
-
+import DetailShow from "../../../components/Shows/DetailShow";
 import {
   selectCurrentShow,
   setCurrentShow,
 } from "../../../features/shows/showsSlice";
 import { getShowById } from "../../../util/db/getShows";
 import { handleError } from "../../../util/util";
-import LoadingComponent from "../../../components/Loading";
 
 const EditShow = () => {
   const currentShow = useSelector(selectCurrentShow);
@@ -46,7 +44,7 @@ const EditShow = () => {
       {loading ? (
         <LoadingComponent />
       ) : (
-        currentShow && <ShowForm show={currentShow} />
+        currentShow && <DetailShow show={currentShow!} />
       )}
     </ResponsiveDrawer>
   );

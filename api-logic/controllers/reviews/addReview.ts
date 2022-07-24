@@ -32,7 +32,7 @@ const addReviewImpl = async (userId: string, review: IReview) => {
     $addToSet: {
       reviews: ReviewDoc._id,
     },
-  });
+  }).populate("userId", "username _id");
   return generateReviewResult(false, "Review Added", ReviewDoc);
 };
 

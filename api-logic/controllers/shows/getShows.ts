@@ -2,7 +2,11 @@ import showSchema from "../../models/ShowModal";
 
 const getShowById = async (id: string) => {
   try {
-    return await showSchema.findById(id);
+    return await showSchema
+      .findById(id)
+      .populate("ratings")
+      .populate("reviews")
+      .populate("userId", "username _id");
   } catch (err) {
     console.error(err);
     return null;

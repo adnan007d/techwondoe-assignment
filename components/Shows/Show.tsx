@@ -13,7 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import authAxios from "../../util/authAxios";
 import { useSnackbar } from "notistack";
 import { AxiosError } from "axios";
-import { checkIfUnauthorized } from "../../util/util";
+import { checkIfUnauthorized, handleError } from "../../util/util";
 import { useRouter } from "next/router";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -53,20 +53,11 @@ const Header = ({ show, edit }: Props) => {
       });
       dispatch(removeShow(show?._id));
     } catch (err) {
-      if (err instanceof AxiosError) {
-        enqueueSnackbar(err.response?.data.message, {
-          variant: "error",
-        });
-        if (checkIfUnauthorized(err)) {
-          setLoading(false);
-          router.push("/login");
-        }
-      } else {
-        console.error(err);
-        enqueueSnackbar("Something went Wrong", {
-          variant: "error",
-        });
-      }
+      handleError({
+        err,
+        enqueueSnackbar,
+        router,
+      });
     }
     setLoading(false);
   };
@@ -142,20 +133,11 @@ const Footer = ({ show, user }: { show: IShowPopulated; user: IUser }) => {
         })
       );
     } catch (err) {
-      if (err instanceof AxiosError) {
-        enqueueSnackbar(err.response?.data.message, {
-          variant: "error",
-        });
-        if (checkIfUnauthorized(err)) {
-          setLoading(false);
-          router.push("/login");
-        }
-      } else {
-        console.error(err);
-        enqueueSnackbar("Something went Wrong", {
-          variant: "error",
-        });
-      }
+      handleError({
+        err,
+        enqueueSnackbar,
+        router,
+      });
     }
     setLoading(false);
   };
@@ -177,22 +159,18 @@ const Footer = ({ show, user }: { show: IShowPopulated; user: IUser }) => {
         })
       );
     } catch (err) {
-      if (err instanceof AxiosError) {
-        enqueueSnackbar(err.response?.data.message, {
-          variant: "error",
-        });
-        if (checkIfUnauthorized(err)) {
-          setLoading(false);
-          router.push("/login");
-        }
-      } else {
-        console.error(err);
-        enqueueSnackbar("Something went Wrong", {
-          variant: "error",
-        });
-      }
+      handleError({
+        err,
+        enqueueSnackbar,
+        router,
+      });
     }
     setLoading(false);
+  };
+
+  const onCommentClick = () => {
+    dispatch(setCurrentShow(show));
+    router.push(`/show/detail/${show._id}`);
   };
 
   return (
@@ -222,21 +200,23 @@ const Footer = ({ show, user }: { show: IShowPopulated; user: IUser }) => {
         </div>
       </div>
 
-      <Badge color="info" badgeContent={reviews} showZero>
-        <CommentIcon className="h-5 w-5" color="inherit" />
-      </Badge>
+      <IconButton onClick={onCommentClick}>
+        <Badge color="info" badgeContent={reviews} showZero>
+          <CommentIcon className="h-5 w-5" color="inherit" />
+        </Badge>
+      </IconButton>
     </footer>
   );
 };
 
 const Show = (props: Props) => {
   const user = useSelector(selectUser);
-  const { edit, show } = props;
+  const { edit, show, className } = props;
 
   return (
-    <div className="shadow-lg p-4 w-[300px]">
+    <div className={`shadow-lg p-4 w-[300px] ${className}`}>
       <Header show={show} edit={user?._id === show.userId._id} />
-      <Main imageURL={show.imageURL!} title={show.title} />
+      <Main imageURL={show.imageURL!} title={show?.title} />
       <Footer show={show} user={user!} />
     </div>
   );

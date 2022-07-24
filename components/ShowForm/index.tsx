@@ -140,7 +140,7 @@ const ShowForm = ({ show }: Props) => {
             fullWidth
           />
           <TextField
-            label="Streaming App (optional)"
+            label="Streaming App"
             name="streamingApp"
             value={formData.streamingApp}
             onChange={onChange}
@@ -148,7 +148,7 @@ const ShowForm = ({ show }: Props) => {
           />
         </div>
         <TextField
-          label="Image Link"
+          label="Image Link (optional)"
           name="imageURL"
           value={formData.imageURL}
           onChange={onChange}

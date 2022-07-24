@@ -1,9 +1,12 @@
 import { Schema, models, model } from "mongoose";
+import { IUser } from "./UserModal";
 
 export interface IReview {
   userId: string;
   showId: string;
   reviewText: string;
+  updatedAt: string;
+  createdAt: string;
   _id?: string;
 }
 
