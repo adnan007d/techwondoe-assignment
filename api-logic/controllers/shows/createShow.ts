@@ -6,7 +6,11 @@ const createShowImpl = async (show: IShow) => {
     ...show,
   });
 
-  return generateShowResult(false, "Show Created", showDoc);
+  return generateShowResult(
+    false,
+    "Show Created",
+    await showDoc.populate("userId", "username _id")
+  );
 };
 
 const createShow = async (show: IShow) => {

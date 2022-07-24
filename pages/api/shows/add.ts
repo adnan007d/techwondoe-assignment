@@ -2,11 +2,11 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createShow } from "../../../api-logic/controllers/shows/createShow";
 import { validateShow } from "../../../api-logic/controllers/shows/showUtil";
-import { IShow } from "../../../api-logic/models/ShowModal";
+import { IShow, IShowPopulated } from "../../../api-logic/models/ShowModal";
 import withAuth from "../../../middleware/withAuth";
 
 type Data = {
-  data?: IShow | null;
+  data?: IShowPopulated | null;
   message: string;
 };
 
@@ -25,6 +25,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     userId: body.user._id,
     title: body.title,
     streamingApp: body.streamingApp,
+    imageURL: body.imageURL,
   });
 
   if (error) {
@@ -33,7 +34,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
 
   return res.status(201).json({
     ...response,
-  });
+  } as any);
 };
 
 export default withAuth(handler);

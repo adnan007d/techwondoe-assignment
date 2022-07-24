@@ -11,4 +11,14 @@ const getShows = async (): Promise<IShowPopulated[]> => {
   }
 };
 
-export { getShows };
+const getShowsByUser = async (id: string): Promise<IShowPopulated[]> => {
+  try {
+    return await (
+      await authAxios.get(`/api/shows/user/${id}`)
+    ).data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export { getShows, getShowsByUser };

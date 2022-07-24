@@ -15,7 +15,14 @@ import { useSnackbar } from "notistack";
 import { AxiosError } from "axios";
 import { checkIfUnauthorized } from "../../util/util";
 import { useRouter } from "next/router";
-import { addRating, removeRating } from "../../features/shows/showsSlice";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import {
+  addRating,
+  removeRating,
+  removeShow,
+  setCurrentShow,
+} from "../../features/shows/showsSlice";
 import { IUser } from "../../api-logic/models/UserModal";
 
 interface Props {
@@ -25,6 +32,45 @@ interface Props {
 }
 
 const Header = ({ show, edit }: Props) => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const onEditClick = () => {
+    dispatch(setCurrentShow(show));
+    router.push(`/show/edit/${show._id}`);
+  };
+
+  const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const onDeleteClick = async () => {
+    setLoading(true);
+    try {
+      const response = await authAxios.post("/api/shows/delete", {
+        id: show?._id,
+      });
+      enqueueSnackbar(response.data.message, {
+        variant: "success",
+      });
+      dispatch(removeShow(show?._id));
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        enqueueSnackbar(err.response?.data.message, {
+          variant: "error",
+        });
+        if (checkIfUnauthorized(err)) {
+          setLoading(false);
+          router.push("/login");
+        }
+      } else {
+        console.error(err);
+        enqueueSnackbar("Something went Wrong", {
+          variant: "error",
+        });
+      }
+    }
+    setLoading(false);
+  };
+
   return (
     <header className="flex justify-between items-center">
       <div className="flex flex-col">
@@ -32,9 +78,14 @@ const Header = ({ show, edit }: Props) => {
         <span className="text-sm text-slate-500">on {show.streamingApp}</span>
       </div>
       {edit ? (
-        <IconButton>
-          <EditIcon />
-        </IconButton>
+        <div>
+          <IconButton onClick={onEditClick}>
+            <EditIcon />
+          </IconButton>
+          <IconButton onClick={onDeleteClick} disabled={loading}>
+            <DeleteIcon />
+          </IconButton>
+        </div>
       ) : (
         <Tooltip title={show.userId.username} className="cursor-pointer" arrow>
           <Avatar>{show.userId.username.charAt(0)}</Avatar>
@@ -68,7 +119,7 @@ const Footer = ({ show, user }: { show: IShowPopulated; user: IUser }) => {
 
   const reviews = show.reviews?.length || 0;
 
-  const rated = show.ratings?.find((rating) => rating.userId === user._id);
+  const rated = show.ratings?.find((rating) => rating.userId === user?._id);
   const router = useRouter();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -184,7 +235,7 @@ const Show = (props: Props) => {
 
   return (
     <div className="shadow-lg p-4 w-[300px]">
-      <Header show={show} edit={edit} />
+      <Header show={show} edit={user?._id === show.userId._id} />
       <Main imageURL={show.imageURL!} title={show.title} />
       <Footer show={show} user={user!} />
     </div>

@@ -1,5 +1,5 @@
 import { Button, TextField } from "@mui/material";
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 
 import joi from "joi";
@@ -8,6 +8,9 @@ import { AxiosError } from "axios";
 import { checkIfUnauthorized } from "../../util/util";
 
 import { useRouter } from "next/router";
+import { IShowPopulated } from "../../api-logic/models/ShowModal";
+import { useDispatch } from "react-redux";
+import { updateShow, addShow } from "../../features/shows/showsSlice";
 
 const validateData = joi.object({
   title: joi.string().label("Title").required(),
@@ -28,12 +31,30 @@ const defaultFormData: IFormData = {
   imageURL: "",
 };
 
-const ShowForm = () => {
+interface Props {
+  show?: IShowPopulated;
+}
+
+const ShowForm = ({ show }: Props) => {
   const router = useRouter();
+  const showId = show?._id;
 
   const [formData, setFormData] = useState<IFormData>(defaultFormData);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
+
+  const formType = showId ? "Edit" : "Add";
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (showId) {
+      setFormData({
+        title: show.title,
+        streamingApp: show.streamingApp,
+        imageURL: show.imageURL!,
+      });
+    }
+  }, [showId, show]);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -55,16 +76,36 @@ const ShowForm = () => {
 
     setLoading(true);
 
-    try {
-      const response = await authAxios.post("/api/shows/add", {
+    let route = "/api/shows";
+    let dataObject = {};
+    if (showId) {
+      dataObject = {
         title: formData.title,
         streamingApp: formData.streamingApp,
         imageURL: formData.imageURL || undefined,
-      });
+        _id: showId,
+      };
+      route += "/update";
+    } else {
+      dataObject = {
+        title: formData.title,
+        streamingApp: formData.streamingApp,
+        imageURL: formData.imageURL || undefined,
+      };
+      route += "/add";
+    }
+
+    try {
+      const response = await authAxios.post(route, dataObject);
       setLoading(false);
-      enqueueSnackbar("Show Added Successfully", {
+      enqueueSnackbar(response.data.message, {
         variant: "success",
       });
+      if (showId) {
+        dispatch(updateShow(response.data.data));
+      } else {
+        dispatch(addShow(response.data.data));
+      }
     } catch (err) {
       if (err instanceof AxiosError) {
         enqueueSnackbar(err.response?.data.message, {
@@ -89,7 +130,7 @@ const ShowForm = () => {
         className="flex flex-col space-y-3 justify-center mt-20 w-11/12 mx-auto max-w-3xl p-4 shadow-2xl"
         onSubmit={onSubmit}
       >
-        <div className="text-4xl text-center">Add a Show</div>
+        <div className="text-4xl text-center">{formType} Show</div>
         <div className="flex flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0">
           <TextField
             label="Title"
@@ -115,8 +156,13 @@ const ShowForm = () => {
         />
         <div>{/* For Image Display */}</div>
 
-        <Button className="bg-blue-700" variant="contained" type="submit">
-          Add Show
+        <Button
+          className="bg-blue-700"
+          variant="contained"
+          type="submit"
+          disabled={loading}
+        >
+          {formType}
         </Button>
       </form>
     </div>

@@ -2,15 +2,22 @@ import showSchema, { IShow } from "../../models/ShowModal";
 import { generateShowResult } from "./showUtil";
 
 const updateShowImpl = async (userId: string, show: IShow) => {
-  const showDoc = await showSchema.findOneAndUpdate(
-    {
-      userId,
-      _id: show._id,
-    },
-    {
-      ...show,
-    }
-  );
+  const showDoc = await showSchema
+    .findOneAndUpdate(
+      {
+        userId,
+        _id: show._id,
+      },
+      {
+        ...show,
+      },
+      {
+        new: true,
+      }
+    )
+    .populate("ratings")
+    .populate("reviews")
+    .populate("userId", "username _id");
 
   if (showDoc) {
     return generateShowResult(false, "Show Updated Successfully", showDoc);

@@ -22,4 +22,19 @@ const getShows = async () => {
   }
 };
 
-export { getShowById, getShows };
+const getShowsByUser = async (userId: string) => {
+  try {
+    return await showSchema
+      .find({
+        userId,
+      })
+      .populate("ratings")
+      .populate("reviews")
+      .populate("userId", "username _id");
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
+};
+
+export { getShowById, getShows, getShowsByUser };

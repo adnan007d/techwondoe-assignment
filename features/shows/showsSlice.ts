@@ -5,6 +5,7 @@ import { RootState } from "../../app/store";
 
 export interface ShowsState {
   shows: IShowPopulated[];
+  currentShow?: IShowPopulated;
 }
 
 const initialState: ShowsState = {
@@ -39,11 +40,38 @@ export const showsSlice = createSlice({
       }
       state.shows = [...temp];
     },
+
+    setCurrentShow: (state, action) => {
+      state.currentShow = action.payload;
+    },
+    removeShow: (state, action) => {
+      state.shows = state.shows.filter((show) => show._id !== action.payload);
+    },
+    updateShow: (state, action) => {
+      const temp = state.shows;
+      const idx = temp.findIndex((show) => show._id === action.payload._id); // never be -1 as the show exists
+      temp[idx] = {
+        ...action.payload,
+      };
+      state.shows = [...temp];
+    },
+    addShow: (state, action) => {
+      state.shows = [...state.shows, action.payload];
+    },
   },
 });
 
-export const { setShows, removeRating, addRating } = showsSlice.actions;
+export const {
+  setShows,
+  removeRating,
+  addRating,
+  setCurrentShow,
+  removeShow,
+  updateShow,
+  addShow,
+} = showsSlice.actions;
 
 export const selectShows = (state: RootState) => state.shows.shows;
+export const selectCurrentShow = (state: RootState) => state.shows.currentShow;
 
 export default showsSlice.reducer;

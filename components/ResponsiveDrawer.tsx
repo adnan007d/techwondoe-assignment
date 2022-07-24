@@ -5,7 +5,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -17,6 +16,10 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import HomeIcon from "@mui/icons-material/Home";
 import Link from "next/link";
+import Edit from "@mui/icons-material/Edit";
+import { useRouter } from "next/router";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { clearToken } from "../util/util";
 
 const drawerWidth = 240;
 
@@ -40,32 +43,51 @@ const Pages = [
     to: "/show/add",
     icon: <AddIcon />,
   },
+  {
+    name: "My Shows",
+    to: "/show/myshows",
+    icon: <Edit />,
+  },
 ];
 
 export default function ResponsiveDrawer(props: Props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const router = useRouter();
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const currentPage = router.pathname;
+
+  const onLogoutClick = () => {
+    clearToken();
+    router.push("/login");
+  };
+
   const drawer = (
-    <div>
+    <div className="h-[calc(100%-80px)]">
       <Toolbar />
       <Divider />
-      <List>
-        {Pages.map((page, index) => (
-          <Link key={index} href={page.to}>
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemIcon>{page.icon}</ListItemIcon>
-                <ListItemText primary={page.name} />
-              </ListItemButton>
-            </ListItem>
-          </Link>
-        ))}
-      </List>
+      <div className="flex flex-col h-full">
+        <List className="flex-1">
+          {Pages.map((page, index) => (
+            <Link key={index} href={page.to}>
+              <ListItem disablePadding>
+                <ListItemButton selected={page.to === currentPage}>
+                  <ListItemIcon>{page.icon}</ListItemIcon>
+                  <ListItemText primary={page.name} />
+                </ListItemButton>
+              </ListItem>
+            </Link>
+          ))}
+        </List>
+        <IconButton onClick={onLogoutClick}>
+          <LogoutIcon />
+        </IconButton>
+      </div>
     </div>
   );
 
