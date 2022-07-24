@@ -1,12 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+import { IUser } from "../../api-logic/models/UserModal";
 
 export interface UserState {
-  user: {
-    username: string;
-    id: string;
-  } | null;
+  user: IUser | null;
 }
 
 const initialState: UserState = {

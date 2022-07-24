@@ -4,6 +4,7 @@ export interface IReview {
   userId: string;
   showId: string;
   reviewText: string;
+  _id?: string;
 }
 
 const reviewSchema = new Schema(

@@ -16,13 +16,33 @@ export const showsSlice = createSlice({
   initialState,
   reducers: {
     setShows: (state, action: PayloadAction<IShowPopulated[]>) => {
-      // console.log(action.payload);
       state.shows = action.payload;
+    },
+    removeRating: (state, action) => {
+      const temp = state.shows;
+      const idx = temp.findIndex((show) => show._id === action.payload.showId); // never be -1 as the show exists
+      temp[idx].ratings = temp[idx].ratings.filter(
+        (rating) => rating._id !== action.payload._id
+      );
+      state.shows = [...temp];
+    },
+    addRating: (state, action) => {
+      const temp = state.shows;
+      const idx = temp.findIndex((show) => show._id === action.payload.showId); // never be -1 as the show exists
+      const ratingIndex = temp[idx].ratings.findIndex(
+        (rating) => rating._id === action.payload._id
+      );
+      if (ratingIndex === -1) {
+        temp[idx].ratings.push(action.payload);
+      } else {
+        temp[idx].ratings[ratingIndex] = action.payload;
+      }
+      state.shows = [...temp];
     },
   },
 });
 
-export const { setShows } = showsSlice.actions;
+export const { setShows, removeRating, addRating } = showsSlice.actions;
 
 export const selectShows = (state: RootState) => state.shows.shows;
 

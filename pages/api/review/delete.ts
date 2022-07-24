@@ -15,7 +15,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     return res.status(400).json({ message: "Invalid Review Id" });
   }
 
-  console.log(body.user.id, body.id);
   const { error, response } = await removeReview(body.user.id, body.id);
 
   if (error) {

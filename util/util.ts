@@ -9,7 +9,7 @@ const getUserNameFromToken = () => {
   if (typeof decodedToken !== "string") {
     return {
       username: decodedToken?.user,
-      id: decodedToken?.id,
+      _id: decodedToken?.id,
     };
   }
   return null;

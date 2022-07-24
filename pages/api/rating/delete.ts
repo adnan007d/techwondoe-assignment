@@ -15,7 +15,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     return res.status(400).json({ message: "Invalid Rating Id" });
   }
 
-  console.log(body.user.id, body.id);
   const { error, response } = await removeRating(body.user.id, body.id);
 
   if (error) {

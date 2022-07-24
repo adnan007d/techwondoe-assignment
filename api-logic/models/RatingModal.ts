@@ -4,6 +4,7 @@ export interface IRating {
   userId: string;
   showId: string;
   rating: number;
+  _id?: string;
 }
 
 const ratingSchema = new Schema(

@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import type { IShowPopulated } from "../../api-logic/models/ShowModal";
 import { selectUser } from "../../features/user/userSlice";
 import Avatar from "@mui/material/Avatar";
@@ -8,7 +8,15 @@ import Rating from "@mui/material/Rating";
 import CommentIcon from "@mui/icons-material/Comment";
 import Badge from "@mui/material/Badge";
 import EditIcon from "@mui/icons-material/Edit";
-import { IconButton } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import authAxios from "../../util/authAxios";
+import { useSnackbar } from "notistack";
+import { AxiosError } from "axios";
+import { checkIfUnauthorized } from "../../util/util";
+import { useRouter } from "next/router";
+import { addRating, removeRating } from "../../features/shows/showsSlice";
+import { IUser } from "../../api-logic/models/UserModal";
 
 interface Props {
   show: IShowPopulated;
@@ -51,7 +59,7 @@ const Main = ({ imageURL, title }: { imageURL: string; title: string }) => {
   );
 };
 
-const Footer = ({ show, userId }: { show: IShowPopulated; userId: string }) => {
+const Footer = ({ show, user }: { show: IShowPopulated; user: IUser }) => {
   const rating = Math.ceil(
     show.ratings?.reduce((prev, next) => {
       return prev + next.rating;
@@ -60,12 +68,93 @@ const Footer = ({ show, userId }: { show: IShowPopulated; userId: string }) => {
 
   const reviews = show.reviews?.length || 0;
 
-  const rated = show.ratings?.find((rating) => rating.userId === userId);
+  const rated = show.ratings?.find((rating) => rating.userId === user._id);
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const onRemoveRating = async () => {
+    setLoading(true);
+    try {
+      const response = await authAxios.post("/api/rating/delete", {
+        id: rated?._id!,
+      });
+      enqueueSnackbar("Rating Removed Successfully", {
+        variant: "success",
+      });
+      dispatch(
+        removeRating({
+          _id: rated?._id!,
+          showId: show._id,
+        })
+      );
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        enqueueSnackbar(err.response?.data.message, {
+          variant: "error",
+        });
+        if (checkIfUnauthorized(err)) {
+          setLoading(false);
+          router.push("/login");
+        }
+      } else {
+        console.error(err);
+        enqueueSnackbar("Something went Wrong", {
+          variant: "error",
+        });
+      }
+    }
+    setLoading(false);
+  };
+
+  const onAddRating = async (value: number) => {
+    setLoading(true);
+    try {
+      const response = await authAxios.post("/api/rating/add", {
+        showId: show._id,
+        rating: value,
+      });
+      enqueueSnackbar("Rating Added Successfully", {
+        variant: "success",
+      });
+      dispatch(
+        addRating({
+          ...response.data.data,
+          userId: user._id,
+        })
+      );
+    } catch (err) {
+      if (err instanceof AxiosError) {
+        enqueueSnackbar(err.response?.data.message, {
+          variant: "error",
+        });
+        if (checkIfUnauthorized(err)) {
+          setLoading(false);
+          router.push("/login");
+        }
+      } else {
+        console.error(err);
+        enqueueSnackbar("Something went Wrong", {
+          variant: "error",
+        });
+      }
+    }
+    setLoading(false);
+  };
+
   return (
     <footer className="flex justify-between">
       <div>
         <div className="flex items-center gap-1">
-          <Rating name="size-small" value={rating} size="small" />
+          <Rating
+            name="size-small"
+            value={rating}
+            size="small"
+            disabled={loading}
+            onChange={(event, newValue) => onAddRating(newValue!)}
+          />
           <span className="text-xs text-slate-500">
             ({show.ratings?.length || 0})
           </span>
@@ -74,6 +163,9 @@ const Footer = ({ show, userId }: { show: IShowPopulated; userId: string }) => {
           {rated && (
             <div>
               <span className="text-xs">You rated {rated.rating}</span>
+              <IconButton onClick={onRemoveRating} disabled={loading}>
+                <CloseIcon className="h-5 w-5" />
+              </IconButton>
             </div>
           )}
         </div>
@@ -94,7 +186,7 @@ const Show = (props: Props) => {
     <div className="shadow-lg p-4 w-[300px]">
       <Header show={show} edit={edit} />
       <Main imageURL={show.imageURL!} title={show.title} />
-      <Footer show={show} userId={user?.id!} />
+      <Footer show={show} user={user!} />
     </div>
   );
 };
