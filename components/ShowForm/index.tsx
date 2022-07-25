@@ -4,8 +4,7 @@ import { useSnackbar } from "notistack";
 
 import joi from "joi";
 import authAxios from "../../util/authAxios";
-import { AxiosError } from "axios";
-import { checkIfUnauthorized } from "../../util/util";
+import { handleError } from "../../util/util";
 
 import { useRouter } from "next/router";
 import { IShowPopulated } from "../../api-logic/models/ShowModal";
@@ -22,7 +21,8 @@ const validateData = joi.object({
 interface IFormData {
   title: string;
   streamingApp: string;
-  imageURL: string;
+  imageURL?: string;
+  _id?: string;
 }
 
 const defaultFormData: IFormData = {
@@ -35,12 +35,38 @@ interface Props {
   show?: IShowPopulated;
 }
 
+const getRouteAndDataObject = (
+  showId: string,
+  formData: IFormData
+): [string, IFormData] => {
+  let route = "/api/shows";
+  let dataObject: IFormData;
+  if (showId) {
+    dataObject = {
+      title: formData.title,
+      streamingApp: formData.streamingApp,
+      imageURL: formData.imageURL || undefined,
+      _id: showId,
+    };
+    route += "/update";
+  } else {
+    dataObject = {
+      title: formData.title,
+      streamingApp: formData.streamingApp,
+      imageURL: formData.imageURL || undefined,
+    };
+    route += "/add";
+  }
+
+  return [route, dataObject];
+};
+
 const ShowForm = ({ show }: Props) => {
   const router = useRouter();
   const showId = show?._id;
 
   const [formData, setFormData] = useState<IFormData>(defaultFormData);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
 
   const formType = showId ? "Edit" : "Add";
@@ -76,28 +102,10 @@ const ShowForm = ({ show }: Props) => {
 
     setLoading(true);
 
-    let route = "/api/shows";
-    let dataObject = {};
-    if (showId) {
-      dataObject = {
-        title: formData.title,
-        streamingApp: formData.streamingApp,
-        imageURL: formData.imageURL || undefined,
-        _id: showId,
-      };
-      route += "/update";
-    } else {
-      dataObject = {
-        title: formData.title,
-        streamingApp: formData.streamingApp,
-        imageURL: formData.imageURL || undefined,
-      };
-      route += "/add";
-    }
+    const [route, dataObject] = getRouteAndDataObject(showId!, formData);
 
     try {
       const response = await authAxios.post(route, dataObject);
-      setLoading(false);
       enqueueSnackbar(response.data.message, {
         variant: "success",
       });
@@ -107,19 +115,7 @@ const ShowForm = ({ show }: Props) => {
         dispatch(addShow(response.data.data));
       }
     } catch (err) {
-      if (err instanceof AxiosError) {
-        enqueueSnackbar(err.response?.data.message, {
-          variant: "error",
-        });
-        if (checkIfUnauthorized(err)) {
-          router.push("/login");
-        }
-      } else {
-        console.error(err);
-        enqueueSnackbar("Something went Wrong", {
-          variant: "error",
-        });
-      }
+      handleError({ err, enqueueSnackbar, router });
     }
     setLoading(false);
   };

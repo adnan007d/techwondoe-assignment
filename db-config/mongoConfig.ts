@@ -1,4 +1,4 @@
-import { connect } from "mongoose";
+import { connect, ConnectOptions } from "mongoose";
 
 const MONGODB_URI = process.env.MONGO_URI;
 
@@ -26,8 +26,9 @@ async function dbConnect() {
   }
 
   if (!cached.promise) {
-    const opts = {
+    const opts : ConnectOptions= {
       bufferCommands: false,
+      serverSelectionTimeoutMS :15000,
     };
     cached.promise = connect(MONGODB_URI!, opts)
       .then((mongoose) => {

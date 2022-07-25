@@ -53,11 +53,7 @@ const Header = ({ show, edit }: Props) => {
       });
       dispatch(removeShow(show?._id));
     } catch (err) {
-      handleError({
-        err,
-        enqueueSnackbar,
-        router,
-      });
+      handleError({ err, enqueueSnackbar, router });
     }
     setLoading(false);
   };
@@ -133,11 +129,7 @@ const Footer = ({ show, user }: { show: IShowPopulated; user: IUser }) => {
         })
       );
     } catch (err) {
-      handleError({
-        err,
-        enqueueSnackbar,
-        router,
-      });
+      handleError({ err, enqueueSnackbar, router });
     }
     setLoading(false);
   };
@@ -159,11 +151,7 @@ const Footer = ({ show, user }: { show: IShowPopulated; user: IUser }) => {
         })
       );
     } catch (err) {
-      handleError({
-        err,
-        enqueueSnackbar,
-        router,
-      });
+      handleError({ err, enqueueSnackbar, router });
     }
     setLoading(false);
   };
@@ -211,7 +199,7 @@ const Footer = ({ show, user }: { show: IShowPopulated; user: IUser }) => {
 
 const Show = (props: Props) => {
   const user = useSelector(selectUser);
-  const { edit, show, className } = props;
+  const { show, className } = props;
 
   return (
     <div className={`shadow-lg p-4 w-[300px] ${className}`}>

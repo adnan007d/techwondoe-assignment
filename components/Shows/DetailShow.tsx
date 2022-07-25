@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { IReview } from "../../api-logic/models/ReviewModal";
 import { IShowPopulated } from "../../api-logic/models/ShowModal";
 import { selectUser } from "../../features/user/userSlice";
 import AddReview from "./AddReview";
@@ -11,18 +12,26 @@ interface Props {
   className?: string;
 }
 
+const swapReview = (reviews: IReview[], reviewd: number) => {
+  let _reviews = reviews;
+  if (reviewd !== -1 && reviews.length > 1) {
+    const Myobj = reviews[reviewd];
+    _reviews = [Myobj, ..._reviews.filter((_, i) => i !== reviewd)];
+  }
+
+  return _reviews;
+};
+
 const DetailShow = (props: Props) => {
   const { show, className } = props;
   const user = useSelector(selectUser);
+
   const reviewd = show.reviews.findIndex(
     (review) => review.userId === user?._id
   );
 
-  let reviews = show.reviews;
-  if (reviewd !== -1 && reviews.length > 1) {
-    const Myobj = reviews[reviewd];
-    reviews = [Myobj, ...reviews.filter((_, i) => i !== reviewd)];
-  }
+  // swapping the current users review with first element
+  const reviews = swapReview(show.reviews, reviewd);
 
   return (
     <div className={`flex flex-col items-center ${className}`}>

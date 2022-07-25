@@ -33,7 +33,7 @@ const Login: NextPage = () => {
   }, [router]);
 
   const [formData, setFormData] = useState(defaultFormData);
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [loading, setLoading] = useState(false);
 

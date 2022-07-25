@@ -84,9 +84,11 @@ export default function ResponsiveDrawer(props: Props) {
             </Link>
           ))}
         </List>
-        <IconButton onClick={onLogoutClick}>
-          <LogoutIcon />
-        </IconButton>
+        <div className="flex justify-center">
+          <IconButton onClick={onLogoutClick}>
+            <LogoutIcon />
+          </IconButton>
+        </div>
       </div>
     </div>
   );
