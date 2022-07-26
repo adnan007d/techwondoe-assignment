@@ -83,9 +83,9 @@ const SignUp: NextPage = () => {
 
   return (
     <div>
-      <div className="grid place-items-center min-h-screen">
+      <div className="grid place-items-center min-h-screen dark:bg-[#111]">
         <form
-          className="shadow-md shadow-[#1d1d1d66] flex flex-col space-y-3 rounded-md p-4"
+          className="shadow-lg flex flex-col space-y-3 rounded-md p-4 dark:bg-black dark:shadow-dark-gray"
           onSubmit={onSubmit}
         >
           <h3 className="text-center text-xl">SignUp</h3>
@@ -111,7 +111,7 @@ const SignUp: NextPage = () => {
           </div>
           <Button
             variant="contained"
-            className="bg-blue-700"
+            className="bg-blue-700 text-white"
             type="submit"
             disabled={loading}
           >

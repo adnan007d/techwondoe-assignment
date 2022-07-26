@@ -35,7 +35,7 @@ const DetailShow = (props: Props) => {
 
   return (
     <div className={`flex flex-col items-center ${className}`}>
-      <div className="w-[800px] w-m-[90%] p-4 shadow-lg">
+      <div className="w-[800px] w-m-[90%] p-4 shadow-lg dark:shadow-dark-gray">
         <Show
           show={show}
           className={`w-m-[85%] shadow-none mx-auto !w-[750px]`}

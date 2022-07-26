@@ -202,7 +202,9 @@ const Show = (props: Props) => {
   const { show, className } = props;
 
   return (
-    <div className={`shadow-lg p-4 w-[300px] ${className}`}>
+    <div
+      className={`shadow-lg p-4 w-[300px] dark:shadow-dark-gray ${className}`}
+    >
       <Header show={show} edit={user?._id === show.userId._id} />
       <Main imageURL={show.imageURL!} title={show?.title} />
       <Footer show={show} user={user!} />

@@ -20,6 +20,10 @@ import Edit from "@mui/icons-material/Edit";
 import { useRouter } from "next/router";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { clearToken } from "../util/util";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import { useDispatch, useSelector } from "react-redux";
+import { selectTheme, toggleTheme } from "../features/ui/uiSlice";
 
 const drawerWidth = 240;
 
@@ -54,6 +58,10 @@ export default function ResponsiveDrawer(props: Props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
+  const theme = useSelector(selectTheme);
+
+  const dispatch = useDispatch();
+
   const router = useRouter();
 
   const handleDrawerToggle = () => {
@@ -87,6 +95,9 @@ export default function ResponsiveDrawer(props: Props) {
         <div className="flex justify-center">
           <IconButton onClick={onLogoutClick}>
             <LogoutIcon />
+          </IconButton>
+          <IconButton onClick={() => dispatch(toggleTheme())} color="inherit">
+            {theme === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
         </div>
       </div>

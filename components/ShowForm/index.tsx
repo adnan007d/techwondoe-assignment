@@ -123,7 +123,7 @@ const ShowForm = ({ show }: Props) => {
   return (
     <div>
       <form
-        className="flex flex-col space-y-3 justify-center mt-20 w-11/12 mx-auto max-w-3xl p-4 shadow-2xl"
+        className="flex flex-col space-y-3 justify-center mt-20 w-11/12 mx-auto max-w-3xl p-4 shadow-2xl dark:shadow-dark-gray"
         onSubmit={onSubmit}
       >
         <div className="text-4xl text-center">{formType} Show</div>
@@ -153,7 +153,7 @@ const ShowForm = ({ show }: Props) => {
         <div>{/* For Image Display */}</div>
 
         <Button
-          className="bg-blue-700"
+          className="bg-blue-700 text-white"
           variant="contained"
           type="submit"
           disabled={loading}
