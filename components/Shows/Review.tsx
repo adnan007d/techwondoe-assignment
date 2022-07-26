@@ -1,6 +1,7 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { IconButton } from "@mui/material";
+import moment from "moment";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
@@ -50,7 +51,11 @@ const ReadReview = ({ setEdit, review }: IReadReview) => {
   return (
     <div className="flex justify-between">
       <div>
-        {review.reviewText} <br /> <span>Created at {review?.updatedAt}</span>
+        {review.reviewText} <br />{" "}
+        <span className="text-slate-500 text-xs flex justify-end mr-2">
+          {review.createdAt === review.updatedAt ? "Created" : "Edited"}{" "}
+          {moment(review.updatedAt).fromNow()}
+        </span>
       </div>
       {user?._id === review.userId && (
         <div className="flex">

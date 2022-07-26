@@ -17,39 +17,44 @@ export interface IShowPopulated
   userId: IUser;
   ratings: IRating[];
   reviews: IReview[];
+  createdAt: string;
+  updatedAt: string;
 }
 
-const showSchema = new Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: userSchema.modelName,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  streamingApp: {
-    type: String,
-    required: true,
-  },
-  imageURL: {
-    type: String,
-    default:
-      "https://dominionmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
-  },
-  ratings: [
-    {
+const showSchema = new Schema(
+  {
+    userId: {
       type: Schema.Types.ObjectId,
-      ref: ratingSchema.modelName,
+      ref: userSchema.modelName,
+      required: true,
     },
-  ],
-  reviews: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: reviewSchema.modelName,
+    title: {
+      type: String,
+      required: true,
     },
-  ],
-});
+    streamingApp: {
+      type: String,
+      required: true,
+    },
+    imageURL: {
+      type: String,
+      default:
+        "https://dominionmartialarts.com/wp-content/uploads/2017/04/default-image.jpg",
+    },
+    ratings: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: ratingSchema.modelName,
+      },
+    ],
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: reviewSchema.modelName,
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 export default models.shows || model<IShow>("shows", showSchema);

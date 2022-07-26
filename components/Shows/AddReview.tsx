@@ -70,7 +70,7 @@ const AddReview = ({ showId, text, onSubmitCallback }: Props) => {
       />
       <div className="flex justify-end">
         <Button
-          className="bg-blue-700"
+          className="bg-blue-700 text-white"
           variant="contained"
           type="submit"
           disabled={loading}

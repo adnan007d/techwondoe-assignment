@@ -12,11 +12,10 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import authAxios from "../../util/authAxios";
 import { useSnackbar } from "notistack";
-import { AxiosError } from "axios";
-import { checkIfUnauthorized, handleError } from "../../util/util";
+import { handleError } from "../../util/util";
 import { useRouter } from "next/router";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import moment from "moment";
 import {
   addRating,
   removeRating,
@@ -63,21 +62,31 @@ const Header = ({ show, edit }: Props) => {
       <div className="flex flex-col">
         <span className="text-lg">{show.title}</span>
         <span className="text-sm text-slate-500">on {show.streamingApp}</span>
+        <span className="text-slate-500 text-xs flex justify-end mr-2">
+          {show.createdAt === show.updatedAt ? "Created" : "Edited"}{" "}
+          {moment(show.updatedAt).fromNow()}
+        </span>
       </div>
-      {edit ? (
-        <div>
-          <IconButton onClick={onEditClick}>
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={onDeleteClick} disabled={loading}>
-            <DeleteIcon />
-          </IconButton>
-        </div>
-      ) : (
-        <Tooltip title={show.userId.username} className="cursor-pointer" arrow>
-          <Avatar>{show.userId.username.charAt(0)}</Avatar>
-        </Tooltip>
-      )}
+      <div>
+        {edit ? (
+          <div>
+            <IconButton onClick={onEditClick}>
+              <EditIcon />
+            </IconButton>
+            <IconButton onClick={onDeleteClick} disabled={loading}>
+              <DeleteIcon />
+            </IconButton>
+          </div>
+        ) : (
+          <Tooltip
+            title={show.userId.username}
+            className="cursor-pointer"
+            arrow
+          >
+            <Avatar>{show.userId.username.charAt(0)}</Avatar>
+          </Tooltip>
+        )}
+      </div>
     </header>
   );
 };
