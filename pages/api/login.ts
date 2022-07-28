@@ -4,6 +4,7 @@ import { IUser } from "../../api-logic/models/UserModal";
 import { getUser } from "../../api-logic/controllers/user/getUser";
 import jwt from "jsonwebtoken";
 import { validateUser } from "../../api-logic/controllers/user/userUtil";
+import { setCookie } from "../../util/server/cookie";
 
 type Data = {
   message: string;
@@ -54,6 +55,7 @@ export default async function handler(
     { expiresIn: "8h" }
   );
 
+  setCookie(res, "token", token, { path: "/" });
   res.status(200).json({
     data: {
       token: token,

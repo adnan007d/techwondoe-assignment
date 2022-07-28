@@ -27,9 +27,9 @@ const SignUp: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (getToken()) {
-      router.push("/");
-    }
+    // if (getToken()) {
+    //   router.push("/");
+    // }
   }, [router]);
 
   const [formData, setFormData] = useState(defaultFormData);

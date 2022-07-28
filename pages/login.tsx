@@ -28,7 +28,7 @@ const Login: NextPage = () => {
 
   useEffect(() => {
     if (getToken()) {
-      router.push("/");
+      // router.push("/");
     }
   }, [router]);
 

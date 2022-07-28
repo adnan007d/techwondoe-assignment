@@ -14,7 +14,8 @@ declare module "jsonwebtoken" {
 
 const withAuth = (handler: NextApiHandler) => {
   return async (req: NextApiRequest, res: NextApiResponse) => {
-    const token = req.headers.authorization?.split(" ")[1];
+    // const token = req.headers.authorization?.split(" ")[1];
+    const token = req.cookies?.token;
     await dbConnect();
     try {
       const decoded = jwt.verify(token!, jwtSecret!);
