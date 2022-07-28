@@ -18,6 +18,7 @@ export const config = {
 export async function middleware(req: NextRequest) {
   const url = req.nextUrl.clone();
 
+  let pathName = url.pathname;
   const notPriv =
     url.pathname.includes("/login") || url.pathname.includes("/signup");
 
@@ -37,13 +38,14 @@ export async function middleware(req: NextRequest) {
   console.log(jwtToken, notPriv, jwtValid);
 
   if (!notPriv && !jwtValid) {
-    url.pathname = "/login";
+    pathName = "/login";
   } else if (notPriv && jwtValid) {
-    url.pathname = "/";
+    pathName = "/";
   } else {
     return NextResponse.next();
   }
-  const response = NextResponse.redirect(url);
+
+  const response = NextResponse.redirect(url.origin + pathName);
 
   response.cookies.delete("token");
 
